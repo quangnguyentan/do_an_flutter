@@ -7,7 +7,6 @@ import 'package:untitled2/pages/Sign_In-Sign_Up/forgot_pass.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/sigin_choose.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/sigin_up.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class sigin_enter_email extends StatefulWidget {
   const sigin_enter_email({super.key});
@@ -20,22 +19,26 @@ class _sigin_enter_emailState extends State<sigin_enter_email> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future signInWithGoogle() async {
+    // // Trigger the authentication flow
+    // final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // if (googleUser == null) {
+    //   return;
+    // }
+    // // Obtain the auth details from the request
+    // final GoogleSignInAuthentication? googleAuth =
+    //     await googleUser?.authentication;
+    //
+    // // Create a new credential
+    // final credential = GoogleAuthProvider.credential(
+    //   accessToken: googleAuth?.accessToken,
+    //   idToken: googleAuth?.idToken,
+    // );
+    //
+    // // Once signed in, return the UserCredential
+    // await FirebaseAuth.instance.signInWithCredential(credential);
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => button()));
   }
 
   @override
@@ -319,7 +322,8 @@ class _sigin_enter_emailState extends State<sigin_enter_email> {
         ),
         GestureDetector(
           child: Container(
-            margin: EdgeInsets.only(top: 42, left: 320),
+            margin: EdgeInsets.only(top: 42, left: 270),
+            width: 80,
             child: const Text(
               'Forgot ?',
               style: TextStyle(
@@ -438,47 +442,17 @@ class _sigin_enter_emailState extends State<sigin_enter_email> {
           ]),
         ],
       ),
-      Column(
-        children: [
-          Stack(children: [
-            Container(
-              margin: EdgeInsets.only(top: 570, left: 25),
-              width: 335,
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color(0xFF60CE74),
-              ),
-            ),
-            Row(
-              children: [
-                MaterialButton(
-                  onPressed: () {
-                    // signInWithGoogle();
-                  },
-                  child: Row(children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 584, left: 46),
-                      child: Image.asset('images/Wechat.png'),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 584, left: 20),
-                      child: const Text(
-                        'Sign in with Google',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                          fontFamily: 'SF Pro Display',
-                        ),
-                      ),
-                    )
-                  ]),
-                )
-              ],
-            ),
-          ]),
-        ],
+      MaterialButton(
+        height: 40,
+        onPressed: () {
+          signInWithGoogle();
+        },
+        child: Row(children: [
+          Image.asset(
+            'images/Wechat.png',
+            width: 20,
+          ),
+        ]),
       ),
       Row(
         children: [

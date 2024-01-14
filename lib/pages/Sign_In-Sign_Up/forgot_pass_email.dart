@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/forgot_pass.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class forgot_pass_email extends StatefulWidget {
   const forgot_pass_email({super.key});
@@ -9,6 +11,13 @@ class forgot_pass_email extends StatefulWidget {
 }
 
 class _forgot_pass_emailState extends State<forgot_pass_email> {
+  TextEditingController email = TextEditingController();
+  @override
+  void dispose() {
+    email.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,6 +173,7 @@ class _forgot_pass_emailState extends State<forgot_pass_email> {
               height: 44,
               margin: EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
+                controller: email,
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -235,12 +245,13 @@ class _forgot_pass_emailState extends State<forgot_pass_email> {
                     color: Color(0xFF4C95FF),
                   ),
                 ),
-                Center(
+                ElevatedButton(
                   child: Container(
-                    margin: EdgeInsets.only(
-                      top: 43,
-                    ),
-                    child: const Text(
+                    width: 363,
+                    height: 50,
+                    margin: EdgeInsets.only(top: 20),
+                    alignment: Alignment.center,
+                    child: Text(
                       'Send',
                       style: TextStyle(
                         color: Colors.white,
@@ -253,6 +264,11 @@ class _forgot_pass_emailState extends State<forgot_pass_email> {
                       ),
                     ),
                   ),
+                  onPressed: () async {
+                    await FirebaseAuth.instance
+                        .sendPasswordResetEmail(email: email.text.trim());
+                    print("abc");
+                  },
                 )
               ]),
             ],

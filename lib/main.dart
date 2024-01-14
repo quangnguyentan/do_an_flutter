@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:untitled2/MyApp.dart';
+import 'package:untitled2/components/Cards/card_11.dart';
 import 'package:untitled2/pages/Splash/splash_basehall.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:untitled2/components/Footer/button.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: splash_basehall(),
+      home: button(),
     );
   }
 }

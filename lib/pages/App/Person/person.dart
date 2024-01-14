@@ -1,18 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:untitled2/components/Cards/card_person.dart';
 import 'package:untitled2/components/Cards/card_person_2.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/sigin_enter_email.dart';
 
 class person extends StatefulWidget {
-  const person({super.key});
+  final userData;
+  const person({super.key, @required this.userData});
 
   @override
   State<person> createState() => _personState();
 }
 
 class _personState extends State<person> {
+  late String displayName;
+
+  @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   Map<String, dynamic> userdata = widget.userData;
+  //   displayName = userdata['displayName'];
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +81,7 @@ class _personState extends State<person> {
           Container(
             child: Center(
               child: Text(
-                'Darren Xu',
+                "abc",
                 style: TextStyle(
                   color: Color(0xFF333333),
                   fontSize: 18,
@@ -110,6 +122,8 @@ class _personState extends State<person> {
                     children: [
                       GestureDetector(
                           onTap: () async {
+                            // GoogleSignIn googleSignIn = GoogleSignIn();
+                            // googleSignIn.disconnect();
                             await FirebaseAuth.instance.signOut();
                             Navigator.push(
                                 context,

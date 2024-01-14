@@ -12,24 +12,6 @@ class Book extends StatefulWidget {
 class _BookState extends State<Book> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children:  [
-          Column(
-            children: [
-              card_11(),
-              card_11(),
-              card_11(),
-              card_11(),
-              card_11(),
-              card_11(),
-              card_11(),
-
-            ],
-          ),
-
-        ],
-      ),
-    );
+    return Scaffold(body: card_11());
   }
 }

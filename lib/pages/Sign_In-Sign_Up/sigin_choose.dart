@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:untitled2/components/Footer/button.dart';
+import 'package:untitled2/pages/App/Person/person.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/sigin_enter.dart';
 import 'package:untitled2/pages/Sign_In-Sign_Up/sigin_enter_email.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:untitled2/pages/Splash/splash_basehall_2.dart';
+
+final _googleSignIn = GoogleSignIn(scopes: <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly'
+]);
 
 class sigin_choose extends StatefulWidget {
   const sigin_choose({super.key});
@@ -14,6 +22,161 @@ class sigin_choose extends StatefulWidget {
 }
 
 class _sigin_chooseState extends State<sigin_choose> {
+  GoogleSignInAccount? _currentUser;
+  Map<String, dynamic>? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _googleSignIn.onCurrentUserChanged.listen((account) {
+      setState(() {
+        _currentUser = account!;
+      });
+      // if (_currentUser != null) {
+      //   print("User is already authenticated");
+      // }
+    });
+    _googleSignIn.signInSilently();
+  }
+
+  Future<void> handleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Link Google Sign-In with Firebase Auth
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Sign in to Firebase with credential
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (error) {
+      print("Sign In error: $error");
+    }
+  }
+
+  // Future<void> handleSignIn() async {
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (error) {
+  //     print("Sign In error: $error");
+  //   }
+  // }
+  // Future<void> signInFacebook() async {
+  //   final LoginResult loginResult =
+  //       await FacebookAuth.instance.login(permissions: ['email,']);
+  //   if (loginResult == LoginStatus.success) {
+  //     final userData = await FacebookAuth.instance.getUserData();
+  //     _userData = userData;
+  //   } else {
+  //     print(loginResult.message);
+  //   }
+  //
+  //   final OAuthCredential oAuthCredential =
+  //       FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  //   await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+  // }
+
+  Future<void> handleSignOut() async {
+    await _googleSignIn.disconnect();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => sigin_choose()));
+  }
+
+  Future<void> handleNextPage() async {
+    Container(
+        child: _currentUser != null
+            ? person(userData: _currentUser)
+            : Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 570, left: 25),
+                    width: 335,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color(0xFF60CE74),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: handleSignIn,
+                      child: Text(
+                        "Sign In With Google",
+                        style: TextStyle(
+                          fontSize: 14,
+                          decoration: TextDecoration.none,
+                          fontFamily: 'SF Pro Display',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ));
+  }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.grey[800],
+//       body: Container(
+
+//     );
+//   }
+// }
+
+// Widget buildWidget() {
+//   GoogleSignInAccount user = _currentUser;
+//   if (user != null) {
+//     return Column(
+//       children: [Text("ABc")],
+//     ); // GestureDetector(
+//     //   onTap: () {
+//     //     Navigator.push(
+//     //         context, MaterialPageRoute(builder: (context) => button()));
+//     //   },
+//     //   child: Center(
+//     //     child: Text("Sign In with Google"),
+//     //   ),
+//     // );
+//   } else {
+//     return Column(
+//       children: [
+//         SizedBox(
+//           height: 90,
+//         ),
+//         Padding(
+//           padding: EdgeInsets.all(8.0),
+//           child: Text(
+//             "Welcome to Google Authentication",
+//             textAlign: TextAlign.center,
+//             style: TextStyle(
+//                 color: Colors.white,
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 20),
+//           ),
+//         ),
+//         SizedBox(
+//           height: 30,
+//         ),
+//         Center(
+//           child: Container(
+//             width: 250,
+//             child: ElevatedButton(
+//               onPressed: handleSignIn,
+//               child: Padding(
+//                 padding: EdgeInsets.all(15.0),
+//               ),
+//             ),
+//           ),
+//         )
+//       ],
+//     );
+//   }
+// }
+
   // Future<UserCredential> signInWithGoogle() async {
   //   // Trigger the authentication flow
   //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -255,7 +418,7 @@ class _sigin_chooseState extends State<sigin_choose> {
                             fontFamily: 'SF Pro Display',
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ]),
@@ -264,42 +427,82 @@ class _sigin_chooseState extends State<sigin_choose> {
             Column(
               children: [
                 Stack(children: [
+                  // Container(
+                  //     // margin: EdgeInsets.only(top: 570, left: 25),
+                  //     // width: 335,
+                  //     // height: 44,
+                  //     // decoration: BoxDecoration(
+                  //     //   borderRadius: BorderRadius.circular(5),
+                  //     //   color: Color(0xFF60CE74),
+                  //     // ),
+                  //     ),
                   Container(
-                    margin: EdgeInsets.only(top: 570, left: 25),
-                    width: 335,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xFF60CE74),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      MaterialButton(
-                        onPressed: () {
-                          // signInWithGoogle();
-                        },
-                        child: Row(children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 584, left: 46),
-                            child: Image.asset('images/Wechat.png'),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 584, left: 20),
-                            child: const Text(
-                              'Sign in with Google',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                decoration: TextDecoration.none,
-                                fontFamily: 'SF Pro Display',
-                              ),
-                            ),
-                          )
-                        ]),
-                      )
-                    ],
-                  ),
+                      child: _currentUser != null
+                          ? Row(
+                              children: [
+                                SizedBox(
+                                  height: 90,
+                                ),
+                                GoogleUserCircleAvatar(identity: _currentUser!),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    _currentUser!.displayName ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Center(
+                                  child: Text(
+                                    _currentUser!.email,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 280,
+                                ),
+                                Center(
+                                  child: Text("Welcome"),
+                                ),
+                                ElevatedButton(
+                                    onPressed: handleSignOut,
+                                    child: Text("Sign Out"))
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 570, left: 25),
+                                  width: 335,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color(0xFF60CE74),
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: handleSignIn,
+                                    child: Text(
+                                      "Sign In With Google",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'SF Pro Display',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
                 ]),
               ],
             ),

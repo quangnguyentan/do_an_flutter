@@ -20,6 +20,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
+#  sdk : ">=2.1.0 <3.0.0"
   # sdk : ">=2.15.0-120.0.dev <3.0.0"
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,7 +40,11 @@ dependencies:
   firebase_auth: ^4.15.3
   firebase_core: ^2.24.2
   awesome_dialog: ^3.1.0
-  google_sign_in: ^6.1.6
+  sign_in_button: ^3.2.0
+#  google_sign_in: ^6.1.6
+  google_sign_in: ^5.1.0
+  http: ^1.1.0
+  flutter_facebook_auth: ^6.0.3
 
 dev_dependencies:
   flutter_test:

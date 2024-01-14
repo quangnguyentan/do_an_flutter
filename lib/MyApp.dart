@@ -15,8 +15,6 @@ List<String> titles = <String>[
   'Browse',
 ];
 
-
-
 class AppBarApp extends StatelessWidget {
   const AppBarApp({super.key});
 
@@ -24,11 +22,8 @@ class AppBarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-
-          cardColor:Color(0xFF4C95FF),
-
+        cardColor: Color(0xFF4C95FF),
       ),
-
       home: const AppBarExample(),
       debugShowCheckedModeBanner: false,
     );
@@ -50,7 +45,7 @@ class AppBarExample extends StatelessWidget {
       length: tabsCount,
       child: Scaffold(
         appBar: AppBar(
-          title:const app_bar(),
+          title: const app_bar(),
           notificationPredicate: (ScrollNotification notification) {
             return notification.depth == 1;
           },
@@ -58,7 +53,6 @@ class AppBarExample extends StatelessWidget {
           scrolledUnderElevation: 4.0,
           // shadowColor: Theme.of(context).primaryColor,
           bottom: TabBar(
-
             indicator: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(40),
@@ -91,18 +85,14 @@ class AppBarExample extends StatelessWidget {
           child: Container(
             child: TabBarView(
               children: <Widget>[
-
                 Take_Away(),
                 Delivery(),
                 Book(),
                 Browse(),
               ],
-
             ),
           ),
-
         ),
-
       ),
     );
   }
