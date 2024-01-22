@@ -32,6 +32,7 @@ class _sigin_chooseState extends State<sigin_choose> {
     _googleSignIn.onCurrentUserChanged.listen((account) {
       setState(() {
         _currentUser = account!;
+        handleNextPage();
       });
       // if (_currentUser != null) {
       //   print("User is already authenticated");
@@ -88,33 +89,24 @@ class _sigin_chooseState extends State<sigin_choose> {
   }
 
   Future<void> handleNextPage() async {
-    Container(
-        child: _currentUser != null
-            ? person(userData: _currentUser)
-            : Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 570, left: 25),
-                    width: 335,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xFF60CE74),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: handleSignIn,
-                      child: Text(
-                        "Sign In With Google",
-                        style: TextStyle(
-                          fontSize: 14,
-                          decoration: TextDecoration.none,
-                          fontFamily: 'SF Pro Display',
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ));
+    if (_currentUser != null) {
+      Navigator.pushReplacementNamed(context, 'person',
+          arguments: _currentUser);
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Bạn chưa đăng nhập"),
+          content: Text("Vui lòng đăng nhập để tiếp tục."),
+          actions: [
+            TextButton(
+              onPressed: handleSignIn,
+              child: Text("Đăng nhập"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
 //   @override
@@ -437,72 +429,31 @@ class _sigin_chooseState extends State<sigin_choose> {
                   //     // ),
                   //     ),
                   Container(
-                      child: _currentUser != null
-                          ? Row(
-                              children: [
-                                SizedBox(
-                                  height: 90,
-                                ),
-                                GoogleUserCircleAvatar(identity: _currentUser!),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Center(
-                                  child: Text(
-                                    _currentUser!.displayName ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Center(
-                                  child: Text(
-                                    _currentUser!.email,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 280,
-                                ),
-                                Center(
-                                  child: Text("Welcome"),
-                                ),
-                                ElevatedButton(
-                                    onPressed: handleSignOut,
-                                    child: Text("Sign Out"))
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(top: 570, left: 25),
-                                  width: 335,
-                                  height: 44,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Color(0xFF60CE74),
-                                  ),
-                                  child: ElevatedButton(
-                                    onPressed: handleSignIn,
-                                    child: Text(
-                                      "Sign In With Google",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'SF Pro Display',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
+                      child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 570, left: 25),
+                        width: 335,
+                        height: 44,
+
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(2),
+                        //   color: Color(0xFF60CE74),
+                        // ),
+                        child: ElevatedButton(
+                          onPressed: handleSignIn,
+                          child: Text(
+                            "Sign In With Google",
+                            style: TextStyle(
+                              fontSize: 14,
+                              decoration: TextDecoration.none,
+                              fontFamily: 'SF Pro Display',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ]),
               ],
             ),
